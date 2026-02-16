@@ -1,0 +1,11 @@
+---
+
+- name: Install Elasticsearch
+  ansible.builtin.import_tasks:
+    file: install.yml
+  when: "elasticsearch_state == 'present'"
+
+- name: Remove Elasticsearch
+  ansible.builtin.import_tasks:
+    file: remove.yml
+  when: "elasticsearch_state == 'absent'"

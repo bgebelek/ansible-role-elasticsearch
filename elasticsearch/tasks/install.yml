@@ -1,0 +1,69 @@
+---
+
+- name: Import Debian Specific Elasticsearch Installation Tasks
+  ansible.builtin.import_tasks:
+    file: install/debian.yml
+  when: ansible_facts.os_family == "Debian"
+
+- name: Import RedHat Specific Elasticsearch Installation Tasks
+  ansible.builtin.import_tasks:
+    file: install/redhat.yml
+  when: ansible_facts.os_family == "RedHat"
+
+- name: Enable Elasticsearch Unit
+  ansible.builtin.systemd_service:
+    enabled: true
+    state: started
+    name: elasticsearch.service
+
+- name: Find File for Elastic User Password
+  ansible.builtin.find:
+    paths: /home/{{ ansible_svc_account }}
+    patterns: "{{ elasticsearch_pwd_file_name }}"
+  register: findings
+
+- name: Check if File for Elastic User Password Does Not Exist
+  when: findings.matched == 0
+  block:
+
+    - name: Create File for Elastic User Password
+      ansible.builtin.file:
+        path: /home/{{ ansible_svc_account }}/{{ elasticsearch_pwd_file_name }}
+        mode: '600'
+        state: touch
+
+    - name: Reset Elastic User Password
+      ansible.builtin.command: /usr/share/elasticsearch/bin/elasticsearch-reset-password -u elastic -b
+      changed_when: true
+      register: result
+
+    - name: Add Elastic User Password to File
+      ansible.builtin.lineinfile:
+        line: "{{ result.stdout_lines[1] | regex_search('(?<=New value:\\s).+') }}"
+        path: /home/{{ ansible_svc_account }}/{{ elasticsearch_pwd_file_name }}
+
+    - name: Get Elastic User Password From Plaintext File
+      ansible.builtin.slurp:
+        src: /home/{{ ansible_svc_account }}/{{ elasticsearch_pwd_file_name }}
+      register: slurped
+
+    - name: Decode Content of Plaintext File
+      ansible.builtin.set_fact:
+        elastic_password: "{{ slurped.content | b64decode | trim('\n') }}"
+
+- name: Get Elastic User Password From Vault Encrypted File
+  ansible.builtin.set_fact:
+    elastic_password: "{{ elastic_password }}"
+  when: findings.matched == 1
+
+- name: Send HTTPS Request to Elasticsearch
+  ansible.builtin.uri:
+    ca_path: /etc/elasticsearch/certs/http_ca.crt
+    url: https://localhost:9200
+    url_username: elastic
+    url_password: "{{ elastic_password }}"
+  register: result
+
+- name: Set Elasticsearch HTTPS Response Code as Fact
+  ansible.builtin.set_fact:
+    elasticsearch_https_response: "{{ result.status }}"
