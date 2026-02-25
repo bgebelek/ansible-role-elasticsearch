@@ -1,19 +1,19 @@
 ---
 
-- name: Get Elastic PGP Public Key
-  ansible.builtin.get_url:
-    dest: /usr/share/keyrings/elasticsearch-keyring.asc
-    url: https://artifacts.elastic.co/GPG-KEY-elasticsearch
-    mode: '644'
-
-- name: Add Elastic APT Repository
-  ansible.builtin.apt_repository:
-    repo: 'deb [signed-by=/usr/share/keyrings/elasticsearch-keyring.asc] https://artifacts.elastic.co/packages/9.x/apt stable main'
+- name: Add Elastic DEB822 Formatted Repository
+  ansible.builtin.deb822_repository:
+    signed_by: https://artifacts.elastic.co/GPG-KEY-elasticsearch
+    enabled: true
+    name: elasticsearch
+    components: main
+    suites: stable
+    uris: https://artifacts.elastic.co/packages/9.x/apt 
 
 - name: Download Transport for HTTPS and Elasticsearch DEB Packages
   ansible.builtin.apt:
     name:
       - apt-transport-https
       - elasticsearch
+    update_cache: true
   notify:
     - 'Reload Systemd Daemon'
