@@ -5,11 +5,11 @@
     fingerprint: 4609 5ACC 8548 582C 1A26 99A9 D27D 666C D88E 42B4
     key: https://artifacts.elastic.co/GPG-KEY-elasticsearch
 
-- name: Define Elasticsearch RPM Repository
+- name: Define Elastic RPM Repository
   ansible.builtin.template:
-    dest: /etc/yum.repos.d/elasticsearch.repo
+    dest: /etc/yum.repos.d/elastic.repo
     mode: '644'
-    src: templates/repository/rpm/elasticsearch.repo.j2
+    src: templates/repository/rpm/elastic.repo.j2
 
 - name: Download Elasticsearch RPM Package
   ansible.builtin.dnf:
