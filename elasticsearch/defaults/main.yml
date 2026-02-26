@@ -1,5 +1,5 @@
 ---
 
-elasticsearch_state: present
 elasticsearch_pwd_file_name: elastic_password_file
 elasticsearch_major_version: 9
+elasticsearch_svc_user: ansible_svc
