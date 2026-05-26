@@ -13,7 +13,7 @@
 
 - name: Download Elasticsearch RPM Package
   ansible.builtin.dnf:
-    name: elasticsearch
+    name: elasticsearch-{{ elasticsearch_major_version }}.{{ elasticsearch_minor_version }}
     state: present
     enablerepo: elasticsearch
   notify:

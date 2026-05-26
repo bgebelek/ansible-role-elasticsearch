@@ -13,7 +13,7 @@
   ansible.builtin.apt:
     name:
       - apt-transport-https
-      - elasticsearch
+      - elasticsearch={{ elasticsearch_major_version }}.{{ elasticsearch_minor_version }}
     update_cache: true
   notify:
     - 'Reload Systemd Daemon'
