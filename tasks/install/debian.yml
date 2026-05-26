@@ -7,7 +7,7 @@
     name: elasticsearch
     components: main
     suites: stable
-    uris: https://artifacts.elastic.co/packages/9.x/apt 
+    uris: https://artifacts.elastic.co/packages/9.x/apt
 
 - name: Download Transport for HTTPS and Elasticsearch DEB Packages
   ansible.builtin.apt:
