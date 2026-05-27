@@ -1,38 +1,56 @@
-Role Name
+Elasticsearch
 =========
 
-A brief description of the role goes here.
+This role allows you to install and setup Elasticsearch.
 
 Requirements
 ------------
 
-Any pre-requisites that may not be covered by Ansible itself or the role should be mentioned here. For instance, if the role uses the EC2 module, it may be a good idea to mention in this section that the boto package is required.
+Managed nodes where these tasks will be ran need to have Linux operating systems. Moreover, distributions based on Debian and Red Hat Enterprise Linux (RHEL).
 
 Role Variables
 --------------
 
-A description of the settable variables for this role should go here, including any variables that are in defaults/main.yml, vars/main.yml, and any variables that can/should be set via parameters to the role. Any variables that are read from other roles and/or the global scope (ie. hostvars, group vars, etc.) should be mentioned here as well.
+`defaults/main.yml`
+
+|Variable|Description|
+|---|---|
+|`elasticsearch_pwd_file`|The file that will contain the password of the `elastic` user. The password should be stored in a vault file after the cluster is started for confidentiality. However, the file itself (without the password) should be kept to prevent the subsequent resetting of the `elastic` user's password.|
+|`elasticsearch_pwd_path`|The absolute path to the file above. The placeholder value for this variable should be replaced before using this role.|
+|`elasticsearch_major_version`|The major version of Elasticsearch which is used to create package repositories and specify the major version of Elasticsearch to be downloaded.|
+|`elasticsearch_minor_version`|The minor version of Elasticsearch used to further specify the version within a major release to download.|
+
+Required Variables
+------------
+
+|Variable|Description|
+|---|---|
+|`elastic_password`|The password for the `elastic` user. This should be kept in a vault file after the cluster is first setup.|
 
 Dependencies
 ------------
 
-A list of other roles hosted on Galaxy should go here, plus any details in regards to parameters that may need to be set for other roles, or variables that are used from other roles.
+Although this role will work by itself, it is intended to be used with the role `bgebelek.kibana`. If used with `bgebelek.kibana`, this role should run first.
 
 Example Playbook
 ----------------
 
-Including an example of how to use your role (for instance, with variables passed in as parameters) is always nice for users too:
+```yaml
+---
 
-    - hosts: servers
-      roles:
-         - { role: username.rolename, x: 42 }
+- name: Manage Elasticsearch
+  hosts:
+    - linux_servers
+  roles:
+    - bgebelek.elasticsearch
+```
 
 License
 -------
 
-BSD
+GPL-3.0-only
 
 Author Information
 ------------------
 
-An optional section for the role authors to include contact information, or a website (HTML is not allowed).
+Please open issues in the remote repository https://github.com/bgebelek/ansible-role-elasticsearch for any problems encountered while using this role.
