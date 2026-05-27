@@ -1,6 +1,6 @@
 ---
 
-elasticsearch_pwd_file_name: elastic_password_file
+elasticsearch_pwd_file: elastic_password_file
 elasticsearch_major_version: 9
 elasticsearch_minor_version: 2.1
 elasticsearch_svc_user: ansible_svc

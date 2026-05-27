@@ -19,7 +19,7 @@
 - name: Find File for Elastic User Password
   ansible.builtin.find:
     paths: /home/{{ elasticsearch_svc_user }}
-    patterns: "{{ elasticsearch_pwd_file_name }}"
+    patterns: "{{ elasticsearch_pwd_file }}"
   register: findings
 
 - name: Check if File for Elastic User Password Does Not Exist
@@ -28,7 +28,7 @@
 
     - name: Create File for Elastic User Password
       ansible.builtin.file:
-        path: /home/{{ elasticsearch_svc_user }}/{{ elasticsearch_pwd_file_name }}
+        path: /home/{{ elasticsearch_svc_user }}/{{ elasticsearch_pwd_file }}
         mode: '600'
         state: touch
 
@@ -40,11 +40,11 @@
     - name: Add Elastic User Password to File
       ansible.builtin.lineinfile:
         line: "{{ result.stdout_lines[1] | regex_search('(?<=New value:\\s).+') }}"
-        path: /home/{{ elasticsearch_svc_user }}/{{ elasticsearch_pwd_file_name }}
+        path: /home/{{ elasticsearch_svc_user }}/{{ elasticsearch_pwd_file }}
 
     - name: Get Elastic User Password From Plaintext File
       ansible.builtin.slurp:
-        src: /home/{{ elasticsearch_svc_user }}/{{ elasticsearch_pwd_file_name }}
+        src: /home/{{ elasticsearch_svc_user }}/{{ elasticsearch_pwd_file }}
       register: slurped
 
     - name: Decode Content of Plaintext File

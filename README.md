@@ -1,17 +1,24 @@
 Role Name
 =========
 
-A brief description of the role goes here.
+This role allows you to install and setup Elasticsearch.
 
 Requirements
 ------------
 
-Any pre-requisites that may not be covered by Ansible itself or the role should be mentioned here. For instance, if the role uses the EC2 module, it may be a good idea to mention in this section that the boto package is required.
+Managed nodes from which tasks will be ran need to have Linux operating systems. Moreover, distributions based on Debian and Red Hat Enterprise Linux (RHEL).
 
 Role Variables
 --------------
 
-A description of the settable variables for this role should go here, including any variables that are in defaults/main.yml, vars/main.yml, and any variables that can/should be set via parameters to the role. Any variables that are read from other roles and/or the global scope (ie. hostvars, group vars, etc.) should be mentioned here as well.
+`defaults/main.yml`
+
+|Variable|Description|
+|---|---|
+|`elasticsearch_pwd_file`|The file that will contain the password of the `elastic` user. The password should be stored in a vault file after the cluster is started for confidentiality. However, the file itself (without the password) should be kept to prevent the subsequent resetting of the `elastic` user's password.|
+|`elasticsearch_major_version`|The major version of Elasticsearch which is used to create package repositories and specify the major version of Elasticsearch to be downloaded.|
+|`elasticsearch_minor_version`|The minor version of Elasticsearch used to further specify the version within a major release to download.|
+|
 
 Dependencies
 ------------
