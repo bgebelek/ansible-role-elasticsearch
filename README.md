@@ -17,7 +17,7 @@ Role Variables
 |---|---|
 | `elasticsearch_major_version` | The major version of Elasticsearch to install (e.g. `9`). Determines the repository URL used for both DEB and RPM package sources. |
 | `elasticsearch_minor_version` | The minor and patch version of Elasticsearch to install (e.g. `2.1`). Combined with `elasticsearch_major_version` to pin the installed package to a specific version. |
-| `elasticsearch_pwd_file` | The name of the file used to store the elastic user password. On the first run, the role resets and stores the password in this file automatically. For subsequent runs, the password should be assigned to the variable `elastic_password`. This file should be kept empty and in-place to prevent future resetting of the elastic user's password. |
+| `elasticsearch_pwd_file` | "Names the file used to store the elastic user password. On the first run, the role resets the elastic user password and writes it to this file. After the first run, the password should be moved to an Ansible Vault encrypted file and assigned to `elastic_password`. This file should remain in place but empty to prevent the role from resetting the password on subsequent runs." |
 | `elasticsearch_pwd_path` | The directory where the elastic user password file is stored. This variable has no meaningful default and must be set by the user. |
 
 Required Variables
