@@ -23,7 +23,7 @@ Role Variables
 Required Variables
 ------------------
 
-These variables can be configured in `group_vars`, `host_vars`, or inventory files depending on the desired precedence.
+This variable can be assigned in `group_vars` or `host_vars` depending on the desired precedence.
 
 | Variable | Description |
 |---|---|
